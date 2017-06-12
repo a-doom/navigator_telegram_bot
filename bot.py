@@ -258,6 +258,7 @@ class NavigatorBot(telepot.helper.ChatHandler):
             self._editor.deleteMessage()
             self._editor = None
 
+
 def _create_table_view(files_list):
     data_list = []
     data_list.append(["filename", "size", "key"])
@@ -301,7 +302,6 @@ def _create_list_view(files_list, max_len):
             data_list.append([file.name, nav.sizeof_fmt(file.size), "{0}".format(idx)])
 
     result = []
-
     for idx, data_row in enumerate(data_list):
         result.append("".ljust(max_len, "-"))
 
@@ -332,8 +332,6 @@ global_files_tree_generators = {}
 global_config = {}
 
 def run_bot(token, config):
-    logging.info("Listening started")
-
     files_tree_generators= {}
     for shared_directories in config.values():
         for sd in shared_directories:
@@ -351,6 +349,7 @@ def run_bot(token, config):
             per_chat_id(types=['private']), create_open, NavigatorBot, timeout=300),
     ])
     MessageLoop(bot).run_as_thread()
+    logging.info("Listening started")
     print('Listening ...')
 
     while 1:

@@ -19,11 +19,7 @@
             "shared_dirs": [
                 {
                     "alias": "dir_1",
-                    "path": "~/dir_1"
-                },
-                {
-                    "alias": "dir_2",
-                    "path": "~/dir_2"
+                    "path": "~/dir_3"
                 }
             ]
         }
