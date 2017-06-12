@@ -1,0 +1,31 @@
+{
+    "token" : "TOKEN",
+    "user_configs":[
+        {
+            "user_id": 1,
+            "shared_dirs": [
+                {
+                    "alias": "dir_1",
+                    "path": "~/dir_1"
+                },
+                {
+                    "alias": "dir_2",
+                    "path": "~/dir_2"
+                }
+            ]
+        },
+        {
+            "user_id": 2,
+            "shared_dirs": [
+                {
+                    "alias": "dir_1",
+                    "path": "~/dir_1"
+                },
+                {
+                    "alias": "dir_2",
+                    "path": "~/dir_2"
+                }
+            ]
+        }
+    ]
+}
