@@ -130,13 +130,14 @@ class Navigator():
         self.aliases = {}
         self.set_dir(dir=self.main_root)
 
-    def add_files_tree(self, root, alias):
-        self.aliases[root.path] = alias
-        root.parent = self.main_root
-        if root.is_dir:
-            self.main_root.dirs.append(root)
+    def add_dir_to_root(self, dir, alias):
+        self.aliases[dir.path] = alias
+        dir.parent = self.main_root
+        dir.name = alias
+        if dir.is_dir:
+            self.main_root.dirs.append(dir)
         else:
-            self.main_root.files.append(root)
+            self.main_root.files.append(dir)
         self.set_dir(dir=self.main_root)
 
     def find_file(self, key, is_dir):
@@ -156,6 +157,15 @@ class Navigator():
         self.current_dir = dir
         self.pagination = Pagination(dir, self.page_size)
         return True
+
+    def get_current_alias_path(self):
+        current_path = str(self.current_dir.path)
+        for k in self.aliases.keys():
+            old_path = str(k)
+            if current_path.startswith(old_path):
+                current_path = current_path.replace(old_path, self.aliases[k], 1)
+                break
+        return current_path
 
     def set_parent_dir(self):
         if self.current_dir.parent is not None:

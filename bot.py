@@ -105,8 +105,8 @@ class NavigatorBot(telepot.helper.ChatHandler):
         shared_directories = global_config[user_id]
         navigator = nav.Navigator(page_size=10)
         for sd in shared_directories:
-            navigator.add_files_tree(
-                root=global_files_tree_generators[sd.path].root_dir,
+            navigator.add_dir_to_root(
+                dir=global_files_tree_generators[sd.path].root_dir,
                 alias=sd.alias)
 
         self._navigator = navigator
@@ -204,7 +204,7 @@ class NavigatorBot(telepot.helper.ChatHandler):
         else:
             table_text = _create_list_view(files_list=files_list, max_len=25)
 
-        path = "path:{0}".format(self._navigator.current_dir.path)
+        path = "path:{0}".format(self._navigator.get_current_alias_path())
         result = "``` {0}\n{1}\n```".format(path, table_text)
         markup = self._create_reply_markup()
 

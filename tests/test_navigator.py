@@ -2,6 +2,7 @@ import unittest
 import navigator as n
 import math
 from unittest.mock import MagicMock
+import os
 
 def create_get_files_tree_func(root_path, dirs_num = 5, files_num = 5, depth = 2):
     def create_files_tree(dirs_num = 5, file_num = 5, depth = 2, root_dir = None, dirs_dict = None):
@@ -41,7 +42,7 @@ class TestNavigator(unittest.TestCase):
         navigator = n.Navigator(page_size=page_size)
         for path in paths:
             root, _ = create_get_files_tree_func(root_path=path)
-            navigator.add_files_tree(root, path)
+            navigator.add_dir_to_root(root, path)
 
         self.assertEqual(len(navigator.main_root.dirs), len(paths))
 
@@ -55,7 +56,7 @@ class TestNavigator(unittest.TestCase):
         navigator = n.Navigator(page_size=page_size)
         for path in paths:
             root, _ = create_get_files_tree_func(root_path=path)
-            navigator.add_files_tree(root, path)
+            navigator.add_dir_to_root(root, path)
 
         navigator.set_dir(path_1)
         self.assertEqual(navigator.current_dir.name, path_1)
@@ -71,7 +72,7 @@ class TestNavigator(unittest.TestCase):
         navigator = n.Navigator(page_size=page_size)
         for path in paths:
             root, _ = create_get_files_tree_func(root_path=path)
-            navigator.add_files_tree(root, path)
+            navigator.add_dir_to_root(root, path)
 
         navigator.set_dir(path_1)
         self.assertEqual(navigator.current_dir.name, path_1)
@@ -89,7 +90,7 @@ class TestNavigator(unittest.TestCase):
         navigator = n.Navigator(page_size=page_size)
         for path in paths:
             root, _ = create_get_files_tree_func(root_path=path)
-            navigator.add_files_tree(root, path)
+            navigator.add_dir_to_root(root, path)
 
         navigator.set_parent_dir()
         self.assertEqual(navigator.current_dir.name, "/")
@@ -110,7 +111,7 @@ class TestNavigator(unittest.TestCase):
                 dirs_num=dirs_num,
                 files_num=file_num,
                 depth=depth)
-            navigator.add_files_tree(root, path)
+            navigator.add_dir_to_root(root, path)
 
         self.assertEqual(navigator.pagination.total_size, 2)
         navigator.set_dir(path_1)
@@ -126,9 +127,21 @@ class TestNavigator(unittest.TestCase):
 
         navigator = n.Navigator(page_size=page_size)
         for path in paths:
-            root, _ = create_get_files_tree_func(root_path=path)
-            navigator.add_files_tree(root, path)
+            root, _ = create_get_files_tree_func(root_path=path, depth=4)
+            navigator.add_dir_to_root(root, path)
 
         navigator.set_dir(path_1)
         file = navigator.get_file("file_1")
         self.assertEqual(file.name, "file_1")
+
+    def test_get_current_alias_path(self):
+        paths = ["path_1", "path_2"]
+        navigator = n.Navigator(page_size=5)
+        for path in paths:
+            root, _ = create_get_files_tree_func(root_path=path)
+            navigator.add_dir_to_root(root, path + "_alias")
+        navigator.set_dir("path_1_alias")
+        navigator.set_dir("dir_1")
+        navigator.set_dir("dir_3")
+        path = navigator.get_current_alias_path()
+        self.assertEqual(path, str(os.path.join("path_1_alias", "dir_1", "dir_3")))
